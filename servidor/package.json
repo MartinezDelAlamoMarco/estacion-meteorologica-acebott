@@ -1,0 +1,13 @@
+{
+  "name": "estacion-meteo",
+  "version": "1.0.0",
+  "description": "API que recibe las lecturas de la estación meteorológica ACEBOTT y las guarda en SQL Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "mssql": "^11.0.1"
+  }
+}

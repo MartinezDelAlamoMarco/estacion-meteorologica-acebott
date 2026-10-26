@@ -1,0 +1,243 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.13.0/schema.json",
+  "name": "de61a1aa4c273a0715a5",
+  "position": {
+    "x": 20,
+    "y": 76,
+    "z": 3300,
+    "height": 624,
+    "width": 1240,
+    "tabOrder": 3300
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Fecha"
+                }
+              },
+              "queryRef": "vw_Lecturas.Fecha",
+              "nativeQueryRef": "Fecha",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Temperatura"
+                }
+              },
+              "queryRef": "vw_Lecturas.Temperatura",
+              "nativeQueryRef": "Temperatura",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Humedad"
+                }
+              },
+              "queryRef": "vw_Lecturas.Humedad",
+              "nativeQueryRef": "Humedad",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Presion"
+                }
+              },
+              "queryRef": "vw_Lecturas.Presion",
+              "nativeQueryRef": "Presion",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Viento"
+                }
+              },
+              "queryRef": "vw_Lecturas.Viento",
+              "nativeQueryRef": "Viento",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "UV"
+                }
+              },
+              "queryRef": "vw_Lecturas.UV",
+              "nativeQueryRef": "UV",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "NivelUV"
+                }
+              },
+              "queryRef": "vw_Lecturas.NivelUV",
+              "nativeQueryRef": "NivelUV",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "LuzPct"
+                }
+              },
+              "queryRef": "vw_Lecturas.LuzPct",
+              "nativeQueryRef": "LuzPct",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "PM25"
+                }
+              },
+              "queryRef": "vw_Lecturas.PM25",
+              "nativeQueryRef": "PM25",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "CalidadAire"
+                }
+              },
+              "queryRef": "vw_Lecturas.CalidadAire",
+              "nativeQueryRef": "CalidadAire",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Llueve"
+                }
+              },
+              "queryRef": "vw_Lecturas.Llueve",
+              "nativeQueryRef": "Llueve",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "vw_Lecturas"
+                    }
+                  },
+                  "Property": "Vibracion"
+                }
+              },
+              "queryRef": "vw_Lecturas.Vibracion",
+              "nativeQueryRef": "Vibracion",
+              "active": true
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "vw_Lecturas"
+                  }
+                },
+                "Property": "LuzPct"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Lecturas (más recientes primero)'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

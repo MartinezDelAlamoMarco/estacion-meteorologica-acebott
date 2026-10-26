@@ -1,0 +1,286 @@
+table vw_Lecturas
+	lineageTag: 51d61b95-39ec-46ed-8ca1-c312769ca6f4
+
+	measure 'Ultima Fecha' = MAX ( vw_Lecturas[Fecha] )
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: b7e8e197-2cac-4d80-b5fe-4eb481ae760a
+
+	measure 'Temperatura actual' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[Temperatura] ), vw_Lecturas[Fecha] = f )
+		formatString: 0.0
+		lineageTag: d01933e1-193b-4204-a9e1-ae56f98ebbc4
+
+	measure 'Humedad actual' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[Humedad] ), vw_Lecturas[Fecha] = f )
+		formatString: 0
+		lineageTag: 538058c4-6dc3-479e-94a1-5bb75dfeeda6
+
+	measure 'Presion actual' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[Presion] ), vw_Lecturas[Fecha] = f )
+		formatString: 0.0
+		lineageTag: 97656187-913e-44ce-a7ce-27253f4e379e
+
+	measure 'Viento actual' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[Viento] ), vw_Lecturas[Fecha] = f )
+		formatString: 0.0
+		lineageTag: a77195e0-70f3-40f3-99b0-2f45a103d121
+
+	measure 'UV actual' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[UV] ), vw_Lecturas[Fecha] = f )
+		formatString: 0
+		lineageTag: 32f73755-a15e-417f-9c80-a2cf86ef1766
+
+	measure 'PM25 actual' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[PM25] ), vw_Lecturas[Fecha] = f )
+		formatString: 0
+		lineageTag: a5efcdf2-f4b6-4f4a-abd5-0c69bb53107b
+
+	measure 'Temperatura media' = AVERAGE ( vw_Lecturas[Temperatura] )
+		formatString: 0.0
+		lineageTag: 2837e3b8-069b-4667-b73a-eb4ddaf0f29b
+
+	measure 'Humedad media' = AVERAGE ( vw_Lecturas[Humedad] )
+		formatString: 0
+		lineageTag: fa49c45c-a4eb-4bdf-9ce1-3463c3b24183
+
+	measure 'Presion media' = AVERAGE ( vw_Lecturas[Presion] )
+		formatString: 0.0
+		lineageTag: 83914296-5474-4cc2-a522-3da73dbb0093
+
+	measure 'PM25 media' = AVERAGE ( vw_Lecturas[PM25] )
+		formatString: 0.0
+		lineageTag: 92eb2264-65a6-40db-bdbe-bcefddbbb9bb
+
+	measure 'Temp rango' = "Mín " & FORMAT ( MIN ( vw_Lecturas[Temperatura] ), "0.0" ) & " · Máx " & FORMAT ( MAX ( vw_Lecturas[Temperatura] ), "0.0" ) & " °C"
+		lineageTag: 4be3afc9-7f78-4e46-80b7-e1f415fa9ef6
+
+	measure 'Hum rango' = "Mín " & FORMAT ( MIN ( vw_Lecturas[Humedad] ), "0" ) & " · Máx " & FORMAT ( MAX ( vw_Lecturas[Humedad] ), "0" ) & " %"
+		lineageTag: a6968ad2-cacf-4488-982b-e4f2da952e3a
+
+	measure 'Presion hace 3h' =
+			VAR f = MAX ( vw_Lecturas[Fecha] )
+			VAR fAntes = CALCULATE ( MAX ( vw_Lecturas[Fecha] ), vw_Lecturas[Fecha] <= f - 3 / 24 )
+			RETURN CALCULATE ( MAX ( vw_Lecturas[Presion] ), vw_Lecturas[Fecha] = fAntes )
+		formatString: 0.0
+		lineageTag: 42a582a5-5d0d-4de4-900d-77422425be7f
+
+	measure 'Presion tendencia' =
+			VAR ahora = [Presion actual]
+			VAR antes = [Presion hace 3h]
+			VAR d = ahora - antes
+			RETURN
+			    IF ( ISBLANK ( antes ), "Sin datos de hace 3 h",
+			        SWITCH ( TRUE (),
+			            d <= -3, "▼ " & FORMAT ( d, "0.0" ) & " hPa en 3 h · posible mal tiempo",
+			            d < -1, "▼ " & FORMAT ( d, "0.0" ) & " hPa en 3 h · bajando",
+			            d > 1, "▲ +" & FORMAT ( d, "0.0" ) & " hPa en 3 h · subiendo",
+			            "● Estable (" & FORMAT ( d, "+0.0;-0.0;0.0" ) & " hPa en 3 h)"
+			        )
+			    )
+		lineageTag: de0f0322-6713-4bcf-86d7-736bb076a7b4
+
+	measure 'Viento max' = "Racha máx " & FORMAT ( MAX ( vw_Lecturas[Viento] ), "0.0" ) & " m/s"
+		lineageTag: 96b70766-e250-417c-be71-cfbba606b1b4
+
+	measure 'UV texto' =
+			VAR u = [UV actual]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( u ), "Sin dato",
+			    u <= 2, "Bajo",
+			    u <= 5, "Moderado · usa gafas de sol",
+			    u <= 7, "Alto · protección solar",
+			    u <= 10, "Muy alto · evita el sol",
+			    "Extremo" )
+		lineageTag: 48821195-aca1-4263-89d6-17249f5a7113
+
+	measure 'Calidad aire' =
+			VAR p = [PM25 actual]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( p ), "Sin dato",
+			    p <= 10, "● Buena",
+			    p <= 20, "● Aceptable",
+			    p <= 25, "● Moderada",
+			    p <= 50, "● Mala",
+			    "● Muy mala" )
+		lineageTag: cf4d5ce2-0dcb-4619-afa3-75e94f6d470a
+
+	measure 'Color calidad aire' =
+			VAR p = [PM25 actual]
+			RETURN SWITCH ( TRUE (),
+			    ISBLANK ( p ), "#898781",
+			    p <= 20, "#0ca30c",
+			    p <= 25, "#fab219",
+			    p <= 50, "#ec835a",
+			    "#d03b3b" )
+		lineageTag: 17ee109d-c466-4d38-8938-e46ee214ca4f
+
+	measure 'Minutos sin datos' = DATEDIFF ( [Ultima Fecha], NOW (), MINUTE )
+		formatString: 0
+		lineageTag: 15e43f31-dafc-4835-9fa3-10ac874651e0
+
+	measure 'Estado estacion' =
+			VAR m = [Minutos sin datos]
+			RETURN
+			    IF ( ISBLANK ( m ), "● Sin datos",
+			        IF ( m <= 15, "● En línea · último dato " & FORMAT ( [Ultima Fecha], "HH:mm" ),
+			            "● Sin datos desde hace " & m & " min" ) )
+		lineageTag: 7981fa7d-82f3-4123-b393-b36d0d5cbe39
+
+	measure 'Color estado' =
+			VAR m = [Minutos sin datos]
+			RETURN IF ( NOT ( ISBLANK ( m ) ) && m <= 15, "#0ca30c", "#d03b3b" )
+		lineageTag: 2c6d39f6-da88-43f7-bf92-37b5ff6aa4e0
+
+	measure Lecturas = COUNTROWS ( vw_Lecturas )
+		formatString: 0
+		lineageTag: a1c796b5-e841-4946-9a08-148bf5a6a76a
+
+	measure 'Color PM25 columna' =
+			VAR p = AVERAGE ( vw_Lecturas[PM25] )
+			RETURN SWITCH ( TRUE (),
+			    p <= 20, "#0ca30c",
+			    p <= 25, "#fab219",
+			    p <= 50, "#ec835a",
+			    "#d03b3b" )
+		lineageTag: c82ae7d9-ba0d-4956-8dc3-aac3ccef43a0
+
+	column Id
+		dataType: int64
+		formatString: 0
+		lineageTag: 1ee94008-dbaa-4e46-abae-7447142a5ffc
+		summarizeBy: none
+		sourceColumn: Id
+
+	column Fecha
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: 705685bd-bdc1-4008-a3c5-20d0f483ef14
+		summarizeBy: none
+		sourceColumn: Fecha
+
+	column Dia
+		dataType: dateTime
+		formatString: dd/mm/yyyy
+		sourceProviderType: date
+		lineageTag: 258d2372-0195-4363-a732-cc674ee856da
+		summarizeBy: none
+		sourceColumn: Dia
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Hora
+		dataType: int64
+		formatString: 0
+		lineageTag: 30fa6d66-ff3e-46e5-8754-ea2ab273abc3
+		summarizeBy: none
+		sourceColumn: Hora
+
+	column FechaHora
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: e9ac7b4a-c424-45e9-b7f0-162816d8794d
+		summarizeBy: none
+		sourceColumn: FechaHora
+
+	column Temperatura
+		dataType: double
+		formatString: 0.0
+		lineageTag: 26998a11-601c-46de-8505-587252887379
+		summarizeBy: none
+		sourceColumn: Temperatura
+
+	column Humedad
+		dataType: double
+		formatString: 0
+		lineageTag: 8e624442-871e-4424-bdae-f85bf72b5bc6
+		summarizeBy: none
+		sourceColumn: Humedad
+
+	column Presion
+		dataType: double
+		formatString: 0.0
+		lineageTag: 2a3b7362-032c-40a2-ab9c-adf5a655163f
+		summarizeBy: none
+		sourceColumn: Presion
+
+	column Viento
+		dataType: double
+		formatString: 0.0
+		lineageTag: e1c63649-b7e0-473c-84fd-eae71fe4f2d7
+		summarizeBy: none
+		sourceColumn: Viento
+
+	column UV
+		dataType: int64
+		formatString: 0
+		lineageTag: acd1c9ca-633f-4fdb-a164-df787b57001e
+		summarizeBy: none
+		sourceColumn: UV
+
+	column NivelUV
+		dataType: string
+		lineageTag: 5a6b11cc-b540-481b-8b55-ff1f12a706d8
+		summarizeBy: none
+		sourceColumn: NivelUV
+
+	column Luz
+		dataType: int64
+		formatString: 0
+		lineageTag: 4262c207-be94-4135-a5ce-80f8f6965774
+		summarizeBy: none
+		sourceColumn: Luz
+
+	column LuzPct
+		dataType: double
+		formatString: 0.0
+		lineageTag: c96ea449-1019-410e-93fa-8768213048b3
+		summarizeBy: none
+		sourceColumn: LuzPct
+
+	column PM25
+		dataType: int64
+		formatString: 0
+		lineageTag: 737d5a89-7124-40c6-90ab-993dc27ad5d8
+		summarizeBy: none
+		sourceColumn: PM25
+
+	column CalidadAire
+		dataType: string
+		lineageTag: 9d6df766-e7d5-4691-9039-1f368162a762
+		summarizeBy: none
+		sourceColumn: CalidadAire
+
+	column Lluvia
+		dataType: int64
+		formatString: 0
+		lineageTag: 52ed37e3-0d85-4b25-9336-7d219ee1f068
+		summarizeBy: none
+		sourceColumn: Lluvia
+
+	column Llueve
+		dataType: string
+		lineageTag: 4268a1c5-a432-40eb-8cf1-f5bba3c92c2a
+		summarizeBy: none
+		sourceColumn: Llueve
+
+	column Vibracion
+		dataType: string
+		lineageTag: eaa77b59-ec14-4ced-8474-e7a464e723ff
+		summarizeBy: none
+		sourceColumn: Vibracion
+
+	partition vw_Lecturas = m
+		mode: directQuery
+		source =
+				let
+				    Origen = Sql.Database("localhost", "EstacionMeteo"),
+				    Vista = Origen{[Schema="dbo",Item="vw_Lecturas"]}[Data]
+				in
+				    Vista
+

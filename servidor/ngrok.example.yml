@@ -1,0 +1,16 @@
+# Configuración del túnel de ngrok.
+# El instalador genera ngrok.yml solo, con tu authtoken. Este archivo es
+# para que veas cómo queda o por si lo quieres montar a mano.
+#
+# addr con 127.0.0.1 y no "localhost": con localhost ngrok tiraba de IPv6
+#   y nos daba error 502 (ERR_NGROK_8012).
+# schemes con http: el ESP32 manda por HTTP porque en nuestra red el HTTPS
+#   con ngrok se cortaba. Si en tu red funciona HTTPS, puedes quitar http.
+version: "3"
+agent:
+  authtoken: TU_AUTHTOKEN_DE_NGROK
+tunnels:
+  estacion:
+    proto: http
+    addr: 127.0.0.1:3000
+    schemes: [https, http]

@@ -1,0 +1,9 @@
+{
+  "dbServer": "localhost",
+  "dbPort": 1433,
+  "dbName": "EstacionMeteo",
+  "dbUser": "estacion_app",
+  "dbPassword": "PON_AQUI_LA_CONTRASENA_DE_SQL",
+  "apiKey": "PON_AQUI_TU_CLAVE",
+  "puerto": 3000
+}

@@ -1,0 +1,19 @@
+# Claves y configuración con datos privados (cada uno se genera la suya)
+servidor/config.json
+servidor/ngrok.yml
+esp32/esp32_estacion/secretos.h
+
+# Cosas que se generan solas en el servidor
+servidor/node_modules/
+servidor/logs/
+servidor/bin/
+servidor/package-lock.json
+
+# Power BI: ajustes locales y caché de cada equipo
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
